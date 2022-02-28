@@ -38,7 +38,7 @@ def show(img):
 
 # 이미지의 크기를 줄여 작업이 더 용이하도록 만듭니다.
 original_img = download(url, max_dim=500)
-show(original_img)
+# show(original_img)
 # display.HTML('Image cc-by: <a "href=https://commons.wikimedia.org/wiki/File:Felis_catus-cat_on_snow.jpg">Von.grzanka</a>')))
 # plt.imshow(np.array(display.HTML('Image cc-by: <a "href=https://commons.wikimedia.org/wiki/File:Felis_catus-cat_on_snow.jpg">Von.grzanka</a>')))
 # plt.show()
@@ -66,7 +66,6 @@ def calc_loss(img, model):
         losses.append(loss)
 
     return tf.reduce_sum(losses)
-
 
 class DeepDream(tf.Module):
     def __init__(self, model):
@@ -98,8 +97,9 @@ class DeepDream(tf.Module):
             # (그래디언트와 이미지의 차원이 동일하므로) 그래디언트를 이미지에 직접 더함으로써 이미지를 업데이트할 수 있습니다.
             img = img + gradients * step_size
             img = tf.clip_by_value(img, -1, 1)
+        print(loss)
+        print(img)
         return loss, img
-
 
 deepdream = DeepDream(dream_model)
 
@@ -120,8 +120,6 @@ def run_deep_dream_simple(img, steps=100, step_size=0.01):
         step += run_steps
 
         loss, img = deepdream(img, run_steps, tf.constant(step_size))
-        loss = 0
-        print(loss)
 
         # display.clear_output(wait=True)
         show(deprocess(img))
